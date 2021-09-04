@@ -196,17 +196,8 @@ def get_teams_list_achieve():
     return jsonify(user_list)
 
 
-@app.route("/get-token", methods=["POST"])
-def get_token():
-    telegram_name = request.json.get("telegram_name", None)
-
-    access_token = create_access_token(identity=telegram_name)
-    return jsonify(access_token=access_token)
-
-
 @app.route("/get_status/<telegram_name>", methods=["GET"])
 def get_status_user(telegram_name):
-    req: dict = request.json
     with engine.connect() as con:
         query_status = f"""select status
                         from users
@@ -216,4 +207,48 @@ def get_status_user(telegram_name):
     return jsonify(status_value)
 
 
+@app.route("/get_mes/<status>", methods=["GET"])
+def get_mes(status):
+    with engine.connect() as con:
+        query_status = f"""select id_mes, date_to_send, text_mes
+                        from messages
+                        where status = '{status}'"""
+        result_status = con.execute(query_status)
+        status_value = [row._asdict() for row in result_status]
 
+    return jsonify(status_value)
+
+
+@app.route("/get-achieve/<telegram_name>", methods=["GET"])
+def get_achieve_user(telegram_name):
+    with engine.connect() as con:
+        query_achieves = f"""select lau.name_ach, lau.ach_price
+                         from users u
+                         join users_achieves ua
+                         on ua.uid_user = u.uid_user
+                         join list_achieves_users lau
+                         on lau.id_ach = ua.id_ach
+                         where telegram_name='{telegram_name}'"""
+        result_achieves = con.execute(query_achieves)
+        profile_achieve = [row._asdict() for row in result_achieves]
+    return jsonify(profile_achieve)
+
+
+@app.route("/get-list-achieve-user", methods=["GET"])
+def get_list_achieve_user():
+    with engine.connect() as con:
+        query_achieves = f"""select name_ach, ach_price
+                         from list_achieves_users"""
+        result_achieves = con.execute(query_achieves)
+        profile_achieve = [row._asdict() for row in result_achieves]
+    return jsonify(profile_achieve)
+
+
+@app.route("/get-list-achieve-team", methods=["GET"])
+def get_list_achieve_team():
+    with engine.connect() as con:
+        query_achieves_team = f"""select name_ach_team, ach_price
+                         from list_achieves_teams"""
+        result_achieves_team = con.execute(query_achieves_team)
+        profile_achieve_team = [row._asdict() for row in result_achieves_team]
+    return jsonify(profile_achieve_team)
