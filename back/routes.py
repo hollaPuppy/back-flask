@@ -196,6 +196,14 @@ def get_teams_list_achieve():
     return jsonify(user_list)
 
 
+@app.route("/get-token", methods=["POST"])
+def get_token():
+    telegram_name = request.json.get("telegram_name", None)
+
+    access_token = create_access_token(identity=telegram_name)
+    return jsonify(access_token=access_token)
+
+
 @app.route("/get_status/<telegram_name>", methods=["GET"])
 def get_status_user(telegram_name):
     req: dict = request.json
