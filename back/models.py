@@ -16,7 +16,6 @@ class Users(db.Model):
 class Teams(db.Model):
     id_team = db.Column(db.Integer, primary_key=True)
     coord = db.Column(db.Integer, nullable=True)
-    balance_team = db.Column(db.Integer, nullable=True)
     team_name = db.Column(db.String(500), nullable=False)
 
 
