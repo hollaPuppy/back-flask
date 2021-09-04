@@ -9,8 +9,8 @@ class Users(db.Model):
     telegram_name = db.Column(db.String(500), nullable=True)
     balance = db.Column(db.Integer, nullable=True)
     id_team = db.Column(db.Integer, db.ForeignKey('teams.id_team'), nullable=True)
-    status = db.Column(db.Boolean, nullable=True)
     telegram_id = db.Column(db.String(500), nullable=False)
+    status = db.Column(db.Integer, nullable=True)
 
 
 class Teams(db.Model):

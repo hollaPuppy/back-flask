@@ -127,9 +127,22 @@ def get_team_info(id_team):
 def get_team_enter(id_team):
     current_user = get_jwt_identity()
     with engine.connect() as con:
-        query_sql = f"""update users
+        query_enter = f"""update users
                         set id_team={id_team}
-                        where telegram_name={current_user}"""
+                        where telegram_name='{current_user}'"""
+        con.execute(query_enter)
+    return 'Update status complete successfully'
+
+
+@app.route("/upd_status/<status>", methods=["PUT"])
+@jwt_required()
+def update_status(status):
+    current_user = get_jwt_identity()
+    with engine.connect() as con:
+        query_upd = f"""update users
+                        set status={status}
+                        where telegram_name='{current_user}'"""
+        con.execute(query_upd)
     return 'Enter to team complete successfully'
 
 
@@ -181,4 +194,18 @@ def get_teams_list_achieve():
         result = con.execute(query_sql)
         user_list = [row._asdict() for row in result]
     return jsonify(user_list)
+
+
+@app.route("/get_status/<telegram_name>", methods=["GET"])
+def get_status_user(telegram_name):
+    req: dict = request.json
+    with engine.connect() as con:
+        query_status = f"""select status
+                        from users
+                        where telegram_name = '{telegram_name}'"""
+        result_status = con.execute(query_status)
+        status_value = [row._asdict() for row in result_status]
+    return jsonify(status_value)
+
+
 
