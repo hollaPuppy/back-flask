@@ -38,10 +38,11 @@ def put_profile():
     req: dict = request.json
     fio = req.get("fio")
     id_team = req.get("id_team")
+    telegram_name = req.get("telegram_name")
     current_user = get_jwt_identity()
     with engine.connect() as con:
         query_sql = f"""update users set
-                        fio = '{fio}', telegram_name = '{current_user}', id_team = '{id_team}' 
+                        fio = '{fio}', telegram_name = '{telegram_name}', id_team = '{id_team}' 
                         where telegram_name={current_user}"""
         con.execute(query_sql)
     return 'Profile update complete successfully'
