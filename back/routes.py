@@ -50,9 +50,36 @@ def put_profile():
 @app.route("/profile/<telegram_name>", methods=["GET"])
 @jwt_required()
 def get_profile(telegram_name):
-    users = Users.query.filter_by(telegram_name=telegram_name).one()
-    return {"telegram_name": users.telegram_name, "fio": users.fio, "img": users.img, "balance": users.balance,
-            "id_team": users.id_team, "status": users.status}
+    current_user = get_jwt_identity()
+    with engine.connect() as con:
+        query_profile = f"""select u.fio, u.img, u.telegram_name, u.balance, t.team_name
+                        from users u
+                        left join teams t 
+                        on t.id_team=u.id_team
+                        where telegram_name='{current_user}'"""
+        result_profile = con.execute(query_profile)
+        profile_info = [row._asdict() for row in result_profile][0]
+        query_achieves = f"""select lau.name_ach, lau.ach_price
+                         from users u
+                         join users_achieves ua
+                         on ua.uid_user = u.uid_user
+                         join list_achieves_users lau
+                         on lau.id_ach = ua.id_ach"""
+        result_achieves = con.execute(query_achieves)
+        profile_achieve = [row._asdict() for row in result_achieves]
+        profile_info['achivements'] = profile_achieve
+    return jsonify(profile_info)
+
+
+@app.route("/all_achieves", methods=["GET"])
+@jwt_required()
+def get_achieves():
+    with engine.connect() as con:
+        query_achieves = f"""select name_ach, ach_price
+                        from list_achieves_users"""
+        result_achieves = con.execute(query_achieves)
+        all_achieves = [row._asdict() for row in result_achieves]
+    return jsonify(all_achieves)
 
 
 @app.route("/protected", methods=["GET"])
@@ -68,6 +95,7 @@ def index():
 
 
 @app.route("/team_balance/<id_team>", methods=["GET"])
+@jwt_required()
 def get_team_id(id_team):
     with engine.connect() as con:
         query_sql = f"""select sum(balance)
@@ -79,6 +107,7 @@ def get_team_id(id_team):
 
 
 @app.route("/team_info/<id_team>", methods=["GET"])
+@jwt_required()
 def get_team_info(id_team):
     with engine.connect() as con:
         query_sql = f"""select sum(u.balance), t.team_name
@@ -128,6 +157,27 @@ def get_user_list():
                         order by users.balance ASC"""
         result = con.execute(query_sql)
         user_list = [row._asdict() for row in result]
-        print(user_list)
+    return jsonify(user_list)
+
+
+@app.route("/list_achieve_users", methods=["GET"])
+@jwt_required()
+def get_user_list_achieve():
+    with engine.connect() as con:
+        query_sql = f"""select id_ach, name_ach, ach_price
+                        from List_achieves_users"""
+        result = con.execute(query_sql)
+        user_list = [row._asdict() for row in result]
+    return jsonify(user_list)
+
+
+@app.route("/list_achieve_teams", methods=["GET"])
+@jwt_required()
+def get_teams_list_achieve():
+    with engine.connect() as con:
+        query_sql = f"""select id_ach_team, name_ach_team, ach_price
+                        from List_achieves_teams"""
+        result = con.execute(query_sql)
+        user_list = [row._asdict() for row in result]
     return jsonify(user_list)
 
