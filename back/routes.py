@@ -44,11 +44,11 @@ def put_profile():
     db.session.commit()
 
 
-@app.route("/profile/<username>", methods=["GET"])
+@app.route("/profile/<telegram_name>", methods=["GET"])
 @jwt_required()
-def get_profile(username):
-    users = Users.query.filter_by(username=username).one()
-    return {"username": users.username, "email": users.email, "img": users.img, "first_name": users.first_name, "second_name": users.second_name}
+def get_profile(telegram_name):
+    users = Users.query.filter_by(telegram_name=telegram_name).one()
+    return {"telegram_name": users.telegram_name, "fio": users.fio, "img": users.img, "balance": users.balance, "id_team": users.id_team, "status": users.status}
 
 
 @app.route("/protected", methods=["GET"])
