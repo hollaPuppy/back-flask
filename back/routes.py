@@ -1,10 +1,12 @@
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
-from back import app, db, engine
-from back.models import Users, Teams, List_achieves_teams, List_achieves_users, Teams_achieves, Users_achieves
+from back import app, db, engine, api
 
 from werkzeug.security import generate_password_hash
+
+from flask_pydantic_spec import Response, Request
+from back.models import Profile, Message
 
 
 @app.route("/login", methods=["POST"])
