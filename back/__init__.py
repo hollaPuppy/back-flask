@@ -13,14 +13,13 @@ FlaskPydanticSpec("flask", title="Demo API", version="v1.0", path="doc")
 api = FlaskPydanticSpec('flask')
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://faozuispekgops:49e44fdedf916d54c5d562385a7677a6f387af7111403befac06fa0b2f96c73b@ec2-176-34-116-203.eu-west-1.compute.amazonaws.com:5432/d1gec1g9j9v7sr'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=300)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 
 CORS(app)
 db = SQLAlchemy(app)
-engine = db.create_engine('postgresql://faozuispekgops:49e44fdedf916d54c5d562385a7677a6f387af7111403befac06fa0b2f96c73b@ec2-176-34-116-203.eu-west-1.compute.amazonaws.com:5432/d1gec1g9j9v7sr',{})
+engine = db.create_engine(DATABASE_URL,{})
 app.config["JWT_SECRET_KEY"] = "aboba"
 jwt = JWTManager(app)
 
@@ -29,3 +28,4 @@ jwt = JWTManager(app)
 Response('HTTP_200') # equals to Response(HTTP_200=None)
 
 from back import routes
+from back.routes import achieves, auth, bot, team, profile
