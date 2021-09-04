@@ -13,7 +13,6 @@ class Profile(BaseModel):
 
 class Config:
     schema_extra = {
-        # provide an example
         'example': {
             'name': 'very_important_user',
             'age': 42,
