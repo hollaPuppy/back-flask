@@ -1,9 +1,10 @@
 from typing import List
 
 
-async def query_all(query: str, con) -> List[dict]:
+def query_all(query: str, con) -> List[dict]:
     result = con.execute(query)
+    return [row._asdict() for row in result]
 
-
-async def query_first():
-    ...
+def query_first(query: str, con) -> dict:
+    result = con.execute(query)
+    return [row._asdict() for row in result][0]

@@ -12,9 +12,12 @@ def put_profile():
     telegram_name = req.get("telegram_name")
     current_user = get_jwt_identity()
     with engine.connect() as con:
-        query_put_profile = f"""update users set
-                             fio = '{fio}', telegram_name = '{telegram_name}', id_team = '{id_team}' 
-                             where telegram_name={current_user}"""
+        query_put_profile = f"""update users
+                                set
+                                    fio = '{fio}', 
+                                    telegram_name = '{telegram_name}', 
+                                    id_team = '{id_team}' 
+                                where telegram_name={current_user}"""
         con.execute(query_put_profile)
     return 'Profile update complete successfully'
 
@@ -24,7 +27,8 @@ def put_profile():
 def get_profile(telegram_name):
     current_user = get_jwt_identity()
     with engine.connect() as con:
-        query_profile = f"""select u.fio, u.img, u.telegram_name, u.balance, t.team_name
+        query_profile = f"""select u.fio, u.img, u.telegram_name, 
+                                u.balance, t.team_name
                             from users u
                             left join teams t 
                             on t.id_team=u.id_team

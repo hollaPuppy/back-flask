@@ -13,8 +13,7 @@ FlaskPydanticSpec("flask", title="Demo API", version="v1.0", path="doc")
 api = FlaskPydanticSpec('flask')
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=300)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 
 CORS(app)
