@@ -14,12 +14,13 @@ def get_status_user(telegram_name):
     return jsonify(status_value)
 
 
-@app.route("/get_mes", methods=["GET"])
-def get_mes():
+@app.route("/get_mes/<status>", methods=["GET"])
+def get_mes(status):
     with engine.connect() as con:
         query_status = f"""select text_mes
                             from messages
                             where date(date_to_send) = '{datetime.today().strftime('%Y-%m-%d')}'
+                            and status={status}
                         """
         status_value = query_first(query_status, con)
     return jsonify(status_value)
