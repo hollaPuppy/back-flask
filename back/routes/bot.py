@@ -10,7 +10,7 @@ def get_status_user(telegram_name):
         query_status = f"""select status
                            from users
                            where telegram_name = '{telegram_name}'"""
-        status_value = query_all(query_status, con)
+        status_value = query_first(query_status, con)
     return jsonify(status_value)
 
 
