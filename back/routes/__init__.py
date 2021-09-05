@@ -1,10 +1,8 @@
+from back.utils import query_all
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from back import app, engine
-
-
-
 
 
 @app.route("/upd_status/<status>", methods=["PUT"])
@@ -19,7 +17,6 @@ def update_status(status):
     return 'Enter to team complete successfully'
 
 
-
 @app.route("/user_list", methods=["GET"])
 @jwt_required()
 def get_user_list():
@@ -29,11 +26,5 @@ def get_user_list():
                               left join teams
                               on teams.id_team=users.id_team
                               order by users.balance ASC"""
-        result_user_list = con.execute(query_user_list)
-        user_user_list = [row._asdict() for row in result_user_list]
+        user_user_list = query_all(query_user_list, con)
     return jsonify(user_user_list)
-
-
-
-
-

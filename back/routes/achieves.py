@@ -1,3 +1,4 @@
+from back.utils import query_all
 from back import app, engine
 from flask import jsonify
 
@@ -11,8 +12,7 @@ def get_achieve_user(telegram_name):
                              join list_achieves_users lau
                              on lau.id_ach = ua.id_ach
                              where telegram_name='{telegram_name}'"""
-        result_achieves = con.execute(query_achieves)
-        profile_achieve = [row._asdict() for row in result_achieves]
+        profile_achieve = query_all(query_achieves, con)
     return jsonify(profile_achieve)
 
 
@@ -20,9 +20,9 @@ def get_achieve_user(telegram_name):
 def get_user_list_achieve():
     with engine.connect() as con:
         query_user_list_achieve = f"""select id_ach, name_ach, ach_price
-                                      from List_achieves_users"""
+                                      from list_achieves_users"""
         result_user_list_achieve = con.execute(query_user_list_achieve)
-        user_list_achieve = [row._asdict() for row in result_user_list_achieve]
+        user_list_achieve = query_all(result_user_list_achieve, con)
     return jsonify(user_list_achieve)
 
 
@@ -30,8 +30,6 @@ def get_user_list_achieve():
 def get_teams_list_achieve():
     with engine.connect() as con:
         query_teams_list_achieve = f"""select id_ach_team, name_ach_team, ach_price
-                                       from List_achieves_teams"""
-        result_teams_list_achieve = con.execute(query_teams_list_achieve)
-        teams_list_achieve = [row._asdict()
-                              for row in result_teams_list_achieve]
+                                       from list_achieves_teams"""
+        teams_list_achieve = query_all(query_teams_list_achieve, con)
     return jsonify(teams_list_achieve)
