@@ -4,7 +4,7 @@ from datetime import timedelta
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy
-#from flask_cors import CORS
+from flask_cors import CORS
 from back.settings import DATABASE_URL
 from flask_pydantic_spec import FlaskPydanticSpec, Response
 
@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 
-#CORS(app)
+CORS(app)
 db = SQLAlchemy(app)
 engine = db.create_engine(DATABASE_URL,{})
 app.config["JWT_SECRET_KEY"] = "aboba"
