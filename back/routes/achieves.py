@@ -21,8 +21,7 @@ def get_user_list_achieve():
     with engine.connect() as con:
         query_user_list_achieve = f"""select id_ach, name_ach, ach_price
                                       from list_achieves_users"""
-        result_user_list_achieve = con.execute(query_user_list_achieve)
-        user_list_achieve = query_all(result_user_list_achieve, con)
+        user_list_achieve = query_all(query_user_list_achieve, con)
     return jsonify(user_list_achieve)
 
 
