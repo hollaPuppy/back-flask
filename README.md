@@ -20,19 +20,33 @@ foo@bar:~$ env/Scripts/activate.ps1
 foo@bar:~$ pip install requirements.txt
 ```
 
-Подключение к базе данных
-Нужно задать переменную окружения 
-Windows
-```bash
+3. Подключение к базе данных
 
+3.1 Нужно задать переменную окружения 
+
+*Windows*
+```bash
+set DATABASE_URL=string
 ```
 
-Linux / Mac
+*Linux / Mac*
 ```bash
-
+export DATABASE_URL=string
 ```
-либо python-файл c названием config.py и переменной DATABASE URL
+3.2 либо python-файл c названием config.py и переменной DATABASE URL
 
+*Windows*
+
+создать файл __config.py__
+
+*Linux / Mac*
+```bash
+touch config.py
+```
+
+```python
+DATABASE_URL = ''
+```
 
 4. Запуск
 ```bash

@@ -23,7 +23,6 @@ app.config["JWT_SECRET_KEY"] = "aboba"
 jwt = JWTManager(app)
 
 
-
 Response('HTTP_200') # equals to Response(HTTP_200=None)
 
 from back import routes
