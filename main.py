@@ -1,5 +1,4 @@
-from back import app, api
+from back import app
 
 if __name__ == "__main__":
-    api.register(app)
     app.run(port=8000)

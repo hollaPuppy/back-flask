@@ -3,6 +3,8 @@ from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from back.utils import query_first
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -20,6 +22,15 @@ def reg():
     telegram_name = req.get("telegram_name")
     password = req.get("password")
     hash_pass = generate_password_hash(password)
+    with engine.connect() as con:
+        query_req_check = f"""select exists (
+                                select
+                                from users
+                                where telegram_name = '{telegram_name}'
+                             )"""
+        is_exists: bool = query_first(query_req_check, con)['exists']
+    if is_exists:
+        return 'User already exists', 409
     with engine.connect() as con:
         query_req = f"""insert into users(fio, hash_pass, telegram_name)
                         values('{fio}', '{hash_pass}', '{telegram_name}')"""

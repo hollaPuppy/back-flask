@@ -24,3 +24,17 @@ def get_mes(status):
                         """
         status_value = query_first(query_status, con)
     return jsonify(status_value)
+
+
+@app.route("/check_user/<telegram_name>", methods=["GET"])
+def check_user(telegram_name):
+        with engine.connect() as con:
+            query_req_check = f"""select exists (
+                                       select
+                                       from users
+                                       where telegram_name = '{telegram_name}'
+                                    )"""
+            is_exists: bool = query_first(query_req_check, con)['exists']
+        if not is_exists:
+            return 'User not exists', 409
+        return 'User exists'
