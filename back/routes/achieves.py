@@ -2,6 +2,7 @@ from back.utils import query_all
 from back import app, engine
 from flask import jsonify
 
+
 @app.route("/get-achieve/<telegram_name>", methods=["GET"])
 def get_achieve_user(telegram_name):
     with engine.connect() as con:
