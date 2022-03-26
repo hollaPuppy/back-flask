@@ -1,5 +1,5 @@
 from back.utils import query_all
-from back import app, engine
+from back import app, engine, socketio
 from flask import jsonify
 from flask_socketio import SocketIO, send
 

@@ -15,6 +15,23 @@ def login():
     return jsonify(access_token=access_token)
 
 
+@app.route("/login", methods=["POST"])
+def login():
+    telegram_name = request.json.get("telegram_name", None)
+    password = request.json.get("password", None)
+    with engine.connect() as con:
+        query_hash = f"""select password
+                                   from users
+                                   where telegram_name = '{telegram_name}'
+                                )"""
+        status_value = query_first(query_hash, con)
+    if check_password_hash(pwhash=status_value['password'], password=password):
+        access_token = create_access_token(identity=telegram_name)
+        return jsonify(access_token=access_token)
+    else:
+        return 'User is not found', 409
+
+
 @app.route("/reg", methods=["POST"])
 def reg():
     req: dict = request.json

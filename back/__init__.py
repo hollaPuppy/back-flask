@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 if __name__ == '__main__':
     socketio.run(app)
