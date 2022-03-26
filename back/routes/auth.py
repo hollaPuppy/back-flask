@@ -10,15 +10,6 @@ from back.utils import query_first
 def login():
     telegram_name = request.json.get("telegram_name", None)
     password = request.json.get("password", None)
-    access_token = create_access_token(identity=telegram_name)
-    check_password_hash()
-    return jsonify(access_token=access_token)
-
-
-@app.route("/login", methods=["POST"])
-def login():
-    telegram_name = request.json.get("telegram_name", None)
-    password = request.json.get("password", None)
     with engine.connect() as con:
         query_hash = f"""select password
                                    from users
